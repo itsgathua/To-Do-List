@@ -50,3 +50,15 @@ li {
 .clear {
     margin-left: 40%;
 }
+
+.completed {
+    text-decoration: line-through;
+    color: rgb(6, 219, 6);
+}
+
+.checkBox {
+    width: 20px;
+    height: 20px;
+    accent-color: red; /* Changes the checked color to red */
+    cursor: pointer;
+}

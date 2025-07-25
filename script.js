@@ -4,7 +4,10 @@ const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 const clearAllBtn = document.getElementById("clearAllBtn")
 
-let tasks = []
+let tasks = [
+  {text:"bruh",completed: true},
+  {text:"cruh",completed: false}
+]
 
 addTaskBtn.addEventListener("click", addTask);
 taskInput.addEventListener("keydown", (event) => {
@@ -25,12 +28,12 @@ function addTask() {
     alert("Enter a task.");
     return;
   }
-  if (tasks.includes(taskText)) {
+  if (tasks.some(task => task.text === taskText)) {
     alert("Task already exists!");
     return;
   }
 
-  tasks.push(taskText);
+  tasks.push({text: taskText, completed: false});
   saveTasks();
   renderTasks();
   taskInput.value = "";
@@ -38,9 +41,27 @@ function addTask() {
 
 function renderTasks() {
   taskList.innerHTML = "";
-  tasks.forEach(taskText => {
+  tasks.forEach((taskObj, index) => {
     const li = document.createElement("li");
-    li.innerText = taskText;
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = taskObj.completed;
+    checkbox.classList.add("checkBox")
+
+    checkbox.addEventListener("change", () => {
+      tasks[index].completed = checkbox.checked;
+      saveTasks();
+      renderTasks();
+    })
+
+    const span = document.createElement("span");
+    span.innerText = taskObj.text;
+    if (taskObj.completed) {
+      span.style.decoration = "line-through";
+      span.style.color = "rgb(6, 219, 6)";
+      span.classList.add("completed")
+    }
     
     const deleteBtn = document.createElement("button")
     deleteBtn.innerText = "X";
@@ -53,11 +74,13 @@ function renderTasks() {
     deleteBtn.style.cursor = "pointer";
 
     deleteBtn.addEventListener("click" , () => {
-      tasks = tasks.filter(task => task !== taskText);
+      tasks.splice(index, 1);
       saveTasks();
       renderTasks();
     });
 
+    li.appendChild(checkbox);
+    li.appendChild(span);
     li.appendChild(deleteBtn);
     taskList.appendChild(li)
   })
