@@ -46,3 +46,7 @@ li {
     justify-content: space-between;
     border-radius: 5px;
 }
+
+.clear {
+    margin-left: 40%;
+}
